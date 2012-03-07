@@ -1,0 +1,19 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories { mavenCentral() }
+
+dependencies {
+	compile 'org.ow2.asm:asm-parent:4.0','commons-logging:commons-logging:1.1.1'
+	testCompile 'junit:junit:4.10'
+}
+
+jar {
+	manifest {
+		attributes("Implementation-Title": "DeepCover", "Implementation-Version": "1.0", "Agent-Class": "org.deepcover.DCAgent",
+				"Can-Redefine-Classes": "true",
+				"Can-Retransform-Classes": "true",
+				"Premain-Class": "org.deepcover.DCAgent")
+	}
+}
+sourceCompatibility = 1.6

@@ -26,7 +26,8 @@ public class DCAgent {
 				.format("premain method invoked with args: %s and inst: %s",
 						args, inst));
 		instrumentation = inst;
-		instrumentation.addTransformer(new DCClassFileTransformer());
+		
+		instrumentation.addTransformer(new DCClassFileTransformer("org.deepcover"));
 	}
 
 }

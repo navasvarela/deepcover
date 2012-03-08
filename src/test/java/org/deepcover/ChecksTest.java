@@ -3,9 +3,13 @@ package org.deepcover;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
 public class ChecksTest {
+	
+	private static final Log LOG = LogFactory.getLog(ChecksTest.class);
 	
 	@Test
 	public void shouldHaveRightMasks() {
@@ -16,6 +20,7 @@ public class ChecksTest {
 	
 	@Test
 	public void testBinaryOps() {
+		LOG.info("Running testBinaryOps");
 		int nullMask = Checks.NULL.getMask();
 		int notNullMask = Checks.NOT_NULL.getMask();
 		int emptyMask = Checks.ZERO_OR_EMPTY.getMask();

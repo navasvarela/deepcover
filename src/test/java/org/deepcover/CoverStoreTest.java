@@ -1,19 +1,35 @@
 package org.deepcover;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-
+import org.objectweb.asm.Type;
 
 public class CoverStoreTest {
 
-	CoverStore store = new CoverStore();
-	
 	@Test
-	public void shouldAddClass() {
-		// act
-		store.addClass(DCAgent.class);
-		// assert
-		assertTrue(store.toString().contains("[methodName=premain, arguments={inst=0, args=0}]"));
+	public void shouldFindCorrectArgTypesForString() {
+		assertEquals(ArgTypes.STRING,
+				CoverStore.parseType(Type.getType(String.class)));
 	}
+
+	@Test
+	public void shouldFindCorrectArgTypesForObject() {
+		assertEquals(ArgTypes.OBJECT,
+				CoverStore.parseType(Type.getType(Object.class)));
+	}
+
+	@Test
+	public void shouldFindCorrectArgTypesForNumber() {
+		assertEquals(ArgTypes.NUMBER,
+				CoverStore.parseType(Type.getType(Long.class)));
+		assertEquals(ArgTypes.NUMBER,
+				CoverStore.parseType(Type.getType(Integer.class)));
+		assertEquals(ArgTypes.NUMBER,
+				CoverStore.parseType(Type.getType(Double.class)));
+		assertEquals(ArgTypes.NUMBER,
+				CoverStore.parseType(Type.getType(Float.class)));
+
+	}
+
 }

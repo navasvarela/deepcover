@@ -26,8 +26,18 @@ public class DCAgent {
 				.format("premain method invoked with args: %s and inst: %s",
 						args, inst));
 		instrumentation = inst;
-		
-		instrumentation.addTransformer(new DCClassFileTransformer("org.deepcover"));
-	}
 
+		instrumentation.addTransformer(new DCClassFileTransformer(
+				"org/deepcover/example"), true);
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+
+			@Override
+			public void run() {
+				System.err.println("CoverStore dump: ");
+				System.err.println(CoverStore.print());
+			}
+
+		});
+	}
 }

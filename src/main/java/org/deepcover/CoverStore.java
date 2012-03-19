@@ -1,5 +1,6 @@
 package org.deepcover;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -79,5 +80,9 @@ public final class CoverStore {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public static Map<String, ClassTracker> getStore() {
+		return Collections.unmodifiableMap(classes);
 	}
 }

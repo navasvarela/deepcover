@@ -4,6 +4,7 @@ import java.lang.instrument.Instrumentation;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.deepcover.report.ReportWriter;
 
 public class DCAgent {
 	private static final Log LOG = LogFactory.getLog(DCAgent.class);
@@ -41,6 +42,9 @@ public class DCAgent {
 			public void run() {
 				System.err.println("CoverStore dump: ");
 				System.err.println(CoverStore.print());
+				ReportWriter writer = new ReportWriter("deepcover.xml",
+						CoverStore.getStore());
+				writer.writeXml();
 			}
 
 		});

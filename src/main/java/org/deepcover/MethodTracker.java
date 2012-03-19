@@ -62,6 +62,10 @@ public class MethodTracker {
 		return argumentTypes;
 	}
 
+	public String getMethodName() {
+		return methodName;
+	}
+
 	@Override
 	public String toString() {
 		return "MethodTracker [methodName=" + methodName + ", arguments="

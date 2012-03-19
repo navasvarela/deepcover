@@ -64,6 +64,10 @@ public class ClassTracker {
 		return Collections.unmodifiableMap(methods);
 	}
 
+	public String getClassName() {
+		return className;
+	}
+
 	@Override
 	public String toString() {
 		return "ClassTracker [className=" + className + ", methods=" + methods

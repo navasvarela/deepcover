@@ -19,10 +19,13 @@ public class DCClassFileTransformer implements ClassFileTransformer, Opcodes {
 	private static final Log LOG = LogFactory
 			.getLog(DCClassFileTransformer.class);
 
-	private final String parentPackage;
+	private final String parentDir;
+
+	private final boolean dump = System.getProperty("org.deepcover.dump") != null;
 
 	public DCClassFileTransformer(String theParentPackage) {
-		parentPackage = theParentPackage;
+		parentDir = theParentPackage.replaceAll("\\.", "/");
+		LOG.info("Class file transformer using dir: " + parentDir);
 	}
 
 	@Override
@@ -30,7 +33,7 @@ public class DCClassFileTransformer implements ClassFileTransformer, Opcodes {
 			Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
 			byte[] classfileBuffer) throws IllegalClassFormatException {
 
-		if (className.contains(parentPackage) && !className.endsWith("Test")) {
+		if (className.contains(parentDir) && !className.endsWith("Test")) {
 			LOG.debug("Transforming class: " + className);
 
 			ClassReader cr = new ClassReader(classfileBuffer);
@@ -64,7 +67,8 @@ public class DCClassFileTransformer implements ClassFileTransformer, Opcodes {
 				LOG.error(t);
 			}
 			LOG.info("Dumping bytecode for class:" + className);
-			dump(cw.toByteArray());
+			if (dump)
+				dump(cw.toByteArray());
 			return cw.toByteArray();
 		}
 		return classfileBuffer;

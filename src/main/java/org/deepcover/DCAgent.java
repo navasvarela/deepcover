@@ -10,6 +10,9 @@ public class DCAgent {
 
 	private static Instrumentation instrumentation;
 
+	private static final String parentPkg = System
+			.getProperty("org.deepcover.pkg");
+
 	/**
 	 * JVM hook to statically load the javaagent at startup.
 	 * 
@@ -26,9 +29,11 @@ public class DCAgent {
 				.format("premain method invoked with args: %s and inst: %s",
 						args, inst));
 		instrumentation = inst;
-
-		instrumentation.addTransformer(new DCClassFileTransformer(
-				"org/deepcover/example"), true);
+		if (parentPkg == null)
+			throw new RuntimeException("Missing property: org.deepcover.pkg");
+		LOG.info("Using package: " + parentPkg);
+		instrumentation.addTransformer(new DCClassFileTransformer(parentPkg),
+				true);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 

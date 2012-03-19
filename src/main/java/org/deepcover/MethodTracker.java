@@ -40,7 +40,7 @@ public class MethodTracker {
 	public void addChecks(Checks[] checks) {
 		List<String> argumentNames = new ArrayList<String>(arguments.keySet());
 		for (int i = 0; i < checks.length; i++) {
-			addCheck(argumentNames.get(i), checks[i]);
+			addCheck("arg" + (i + 1), checks[i]);
 		}
 	}
 

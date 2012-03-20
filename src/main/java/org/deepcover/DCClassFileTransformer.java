@@ -44,12 +44,12 @@ public class DCClassFileTransformer implements ClassFileTransformer, Opcodes {
 				public MethodVisitor visitMethod(int access, String methodName,
 						String desc, String signature, String[] theExceptions) {
 					// TODO Auto-generated method stub
-					LOG.info(String.format("visitMethod(%d,%s,%s,%s,%s)",
+					LOG.debug(String.format("visitMethod(%d,%s,%s,%s,%s)",
 							access, methodName, desc, signature, theExceptions));
 					CoverStore.add(className, methodName, desc);
 					MethodVisitor mv = super.visitMethod(access, methodName,
 							desc, signature, theExceptions);
-					LOG.info("MV: " + mv);
+
 					if (mv != null) {
 						if (ACC_PUBLIC == access && !desc.contains("()")) {
 							mv = new DCMethodAdapter(ASM4, mv, access,
@@ -66,9 +66,10 @@ public class DCClassFileTransformer implements ClassFileTransformer, Opcodes {
 			} catch (Throwable t) {
 				LOG.error(t);
 			}
-			LOG.info("Dumping bytecode for class:" + className);
-			if (dump)
+			if (dump) {
+				LOG.info("Dumping bytecode for class:" + className);
 				dump(cw.toByteArray());
+			}
 			return cw.toByteArray();
 		}
 		return classfileBuffer;

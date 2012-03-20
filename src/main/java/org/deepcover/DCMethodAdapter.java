@@ -23,7 +23,7 @@ public class DCMethodAdapter extends AdviceAdapter {
 
 	@Override
 	protected void onMethodEnter() {
-		LOG.info("onMethodEnter(), " + methodName);
+		LOG.debug("onMethodEnter(), " + methodName);
 		try {
 			visitLdcInsn(methodName);
 			int methodIndex = newLocal(Type.getType(String.class));

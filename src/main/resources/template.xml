@@ -7,18 +7,18 @@
 		<nullChecks>${pkg.nullChecks}</nullChecks>
 		<emptyChecks>${pkg.emptyChecks}</emptyChecks>
 		<notNullChecks>${pkg.notNullChecks}</notNullChecks>
-		<#list pkg.classes as cls>
+		<#list pkg.elements as cls>
 		<class name="${cls.name}">
 
 			<nullChecks>${cls.nullChecks}</nullChecks>
 			<emptyChecks>${cls.emptyChecks}</emptyChecks>
 			<notNullChecks>${cls.notNullChecks}</notNullChecks>
-			<#list cls.methods as method>
+			<#list cls.elements as method>
 			<method name="${method.name}">
 				<nullChecks>${method.nullChecks}</nullChecks>
 				<emptyChecks>${method.emptyChecks}</emptyChecks>
 				<notNullChecks>${method.notNullChecks}</notNullChecks>
-				<#list method.arguments as arg>
+				<#list method.elements as arg>
 				<argument name="${arg.name}">
 					<nullChecks>${arg.nullChecks}</nullChecks>
 					<#if arg.type != 'object'>

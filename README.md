@@ -19,10 +19,12 @@ or not trivial and non trivial values for an argument in any public method of hi
 number of source code errors. 
 
 Lets look at a simple example:
-```java
+```
+
 public double divide(double x, double y) {
   return x / y;
 }
+
 ```
 In general, this code will work for non-trivial cases (x and y non zero), but when y is zero (trivial case) 
 it will throw and arithmetic exception. If we write test code, the standard code coverage solutions would give us

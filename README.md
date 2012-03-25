@@ -19,7 +19,7 @@ or not trivial and non trivial values for an argument in any public method of hi
 number of source code errors. 
 
 Lets look at a simple example:
-```
+```java
 public double divide(double x, double y) {
   return x / y;
 }

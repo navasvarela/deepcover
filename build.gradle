@@ -1,5 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+version '1.0'
+group 'org.deepcover'
 
 repositories { mavenCentral() }
 sourceCompatibility = 1.6
@@ -13,6 +17,7 @@ dependencies {
 	testRuntime 'org.ow2.asm:asm-parent:4.0','commons-logging:commons-logging:1.1.1'
 }
 
+
 jar {
 	manifest {
 		attributes("Implementation-Title": "DeepCover", "Implementation-Version": "1.0", "Agent-Class": "org.deepcover.DCAgent",
@@ -21,7 +26,11 @@ jar {
 				"Premain-Class": "org.deepcover.DCAgent")
 	}
 	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	
+	
 }
+
+
 
 
 

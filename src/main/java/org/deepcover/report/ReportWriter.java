@@ -21,6 +21,8 @@ public class ReportWriter {
 
 	private final Map<String, ClassTracker> store;
 
+	private XmlReport report;
+
 	public ReportWriter(String theFileName, Map<String, ClassTracker> theStore) {
 
 		fileName = theFileName;
@@ -63,7 +65,7 @@ public class ReportWriter {
 	public void writeXml() {
 		Configuration conf = new Configuration();
 		conf.setClassForTemplateLoading(ReportWriter.class, "/");
-		XmlReport report = createXmlReport();
+		report = createXmlReport();
 		try {
 			Template tmpl = conf.getTemplate("/template.xml");
 			tmpl.process(report, new FileWriter(fileName));
@@ -74,6 +76,25 @@ public class ReportWriter {
 
 			e.printStackTrace();
 		}
+	}
+
+	public void writeHtml(String fileName) {
+		Configuration conf = new Configuration();
+		conf.setClassForTemplateLoading(ReportWriter.class, "/");
+		if (report == null)
+			report = createXmlReport();
+
+		try {
+			Template tmpl = conf.getTemplate("/base_template.html");
+			tmpl.process(report, new FileWriter(fileName));
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		} catch (TemplateException e) {
+
+			e.printStackTrace();
+		}
+
 	}
 
 }

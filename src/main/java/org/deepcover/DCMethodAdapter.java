@@ -39,7 +39,9 @@ public class DCMethodAdapter extends AdviceAdapter {
 							.getMethod("addCheck", String.class, String.class,
 									Object[].class)));
 		} catch (Throwable t) {
-			t.printStackTrace();
+			LOG.error("While visiting method " + methodName + " in class "
+					+ className, t);
+
 		}
 
 	}

@@ -49,7 +49,7 @@ that displays the results in a more user friendly format.
 
 If you set the system property *org.deepcover.dump* to any value, you will see a bytecode dump of all the transformed classes.
 
-## LICENCE
+## LICENSE
 
 The GPL version 3, read it at http://www.gnu.org/licenses/gpl.txt
 

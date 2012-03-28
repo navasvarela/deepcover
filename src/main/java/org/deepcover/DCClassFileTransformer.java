@@ -33,7 +33,8 @@ public class DCClassFileTransformer implements ClassFileTransformer, Opcodes {
 			Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
 			byte[] classfileBuffer) throws IllegalClassFormatException {
 
-		if (className.contains(parentDir) && !className.endsWith("Test")) {
+		if (className.contains(parentDir) && !className.endsWith("Test")
+				&& !className.contains("Test$")) {
 			LOG.debug("Transforming class: " + className);
 
 			ClassReader cr = new ClassReader(classfileBuffer);
@@ -50,7 +51,7 @@ public class DCClassFileTransformer implements ClassFileTransformer, Opcodes {
 					MethodVisitor mv = super.visitMethod(access, methodName,
 							desc, signature, theExceptions);
 
-					if (mv != null) {
+					if (mv != null && !"<init>".equals(methodName)) {
 						if (ACC_PUBLIC == access && !desc.contains("()")) {
 							mv = new DCMethodAdapter(ASM4, mv, access,
 									methodName, desc, className);

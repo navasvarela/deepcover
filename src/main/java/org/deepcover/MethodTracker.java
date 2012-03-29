@@ -1,5 +1,6 @@
 package org.deepcover;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MethodTracker {
+public class MethodTracker implements Serializable {
 	private final String methodName;
 
 	private final Map<String, Integer> arguments;

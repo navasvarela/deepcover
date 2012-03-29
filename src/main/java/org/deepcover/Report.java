@@ -1,7 +1,13 @@
 package org.deepcover;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -16,6 +22,10 @@ import org.deepcover.report.XMLReportDocument;
 import org.deepcover.report.XMLSourceElement;
 
 public class Report {
+	private static final String[] RESOURCES = new String[] {
+			"bootstrap/css/bootstrap.css",
+			"bootstrap/css/bootstrap-responsive.css",
+			"bootstrap/js/bootstrap.js", "jquery-1.7.2.min.js" };
 
 	/**
 	 * @param args
@@ -35,19 +45,20 @@ public class Report {
 			report.accummulate((XMLReportDocument) unmarshaller.unmarshal(file));
 		}
 		// 3. Write XML
-		ReportWriter writer = new ReportWriter("deepcover.xml");
+		ReportWriter writer = new ReportWriter("deepcover/deepcover.xml");
 		writer.writeXml(report);
 		// 4. Write HTML
-		writer.writeHtml("deepcover.html", report);
+		writer.writeHtml("deepcover/deepcover.html", report);
 		// 5. Delete individual files.
 		for (File file : reportFiles) {
 			file.delete();
 		}
+		unzipResources();
 
 	}
 
 	public static File[] findReportFiles() {
-		File dir = new File(".");
+		File dir = new File("./deepcover");
 		File[] files = dir.listFiles(new FilenameFilter() {
 
 			@Override
@@ -57,6 +68,66 @@ public class Report {
 			}
 		});
 		return files;
+	}
+
+	private static void unzipResources() {
+
+		File css = new File("deepcover/bootstrap/css");
+		File js = new File("deepcover/bootstrap/js");
+
+		css.mkdirs();
+		js.mkdirs();
+		for (String resource : RESOURCES) {
+			new File(resource).delete();
+
+			copyFile(resource);
+		}
+
+	}
+
+	protected static void copyFile(String resource) {
+
+		InputStream in = DCAgent.class.getResourceAsStream("/" + resource);
+		BufferedReader reader = null;
+		BufferedWriter writer = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(in));
+			writer = new BufferedWriter(new FileWriter("deepcover/" + resource));
+			String s;
+			while ((s = reader.readLine()) != null) {
+				writer.append(s + System.getProperty("line.separator"));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			if (writer != null) {
+				try {
+
+					writer.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
 	}
 
 }

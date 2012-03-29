@@ -47,12 +47,12 @@ public class DCClassFileTransformer implements ClassFileTransformer, Opcodes {
 					// TODO Auto-generated method stub
 					LOG.debug(String.format("visitMethod(%d,%s,%s,%s,%s)",
 							access, methodName, desc, signature, theExceptions));
-					CoverStore.add(className, methodName, desc);
 					MethodVisitor mv = super.visitMethod(access, methodName,
 							desc, signature, theExceptions);
 
 					if (mv != null && !"<init>".equals(methodName)) {
 						if (ACC_PUBLIC == access && !desc.contains("()")) {
+							CoverStore.add(className, methodName, desc);
 							mv = new DCMethodAdapter(ASM4, mv, access,
 									methodName, desc, className);
 						}

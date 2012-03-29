@@ -1,6 +1,10 @@
 package org.deepcover;
 
-import java.util.Collections;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,6 +27,7 @@ public final class CoverStore {
 				argumentValues));
 		ClassTracker classTracker = classes.get(className);
 		classTracker.calculateChecksForMethod(methodName, argumentValues);
+		serialize();
 
 	}
 
@@ -39,6 +44,7 @@ public final class CoverStore {
 		if (!methodSignature.contains("()"))
 			classTracker.addMethod(methodName, parseSignature(methodSignature));
 
+		serialize();
 	}
 
 	public static String print() {
@@ -82,7 +88,34 @@ public final class CoverStore {
 		return false;
 	}
 
+	private static void serialize() {
+		try {
+			FileOutputStream out = new FileOutputStream("coverstore.ser");
+			ObjectOutputStream objOut = new ObjectOutputStream(out);
+			objOut.writeObject(classes);
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+	}
+
+	private static Map<String, ClassTracker> deserialize() {
+		try {
+			FileInputStream fis = new FileInputStream("coverstore.ser");
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			return (Map<String, ClassTracker>) ois.readObject();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public static Map<String, ClassTracker> getStore() {
-		return Collections.unmodifiableMap(classes);
+
+		return deserialize();
 	}
 }

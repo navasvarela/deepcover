@@ -51,9 +51,11 @@ public class MethodElement extends SourceElement {
 		for (SourceElement arg : getElements()) {
 			for (XMLArgument xmlArg : arguments) {
 				if (xmlArg.getName().equals(arg.getName())) {
-					arg.actualEmpty = arg.actualEmpty
-							| Integer.parseInt(xmlArg.getEmptyChecks().split(
-									"/")[0].trim());
+					if (xmlArg.getEmptyChecks() != null) {
+						arg.actualEmpty = arg.actualEmpty
+								| Integer.parseInt(xmlArg.getEmptyChecks()
+										.split("/")[0].trim());
+					}
 					arg.actualNull = arg.actualNull
 							| Integer.parseInt(xmlArg.getNullChecks()
 									.split("/")[0].trim());

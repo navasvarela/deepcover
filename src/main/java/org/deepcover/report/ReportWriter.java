@@ -27,9 +27,9 @@ public class ReportWriter {
 	private ReportModel report;
 
 	public ReportWriter(String theFileName, Map<String, ClassTracker> theStore) {
-
 		this(theFileName);
-		store = new HashMap<String, ClassTracker>();
+		LOG.debug("ReportWriter(" + theFileName + "," + theStore + ")");
+		store = theStore;
 		createStoreByPackage();
 	}
 
@@ -39,6 +39,7 @@ public class ReportWriter {
 	}
 
 	private void createStoreByPackage() {
+
 		storeByPackage = new HashMap<String, List<ClassTracker>>();
 		for (ClassTracker tracker : store.values()) {
 			String packageName = getPackageName(tracker);
@@ -63,6 +64,7 @@ public class ReportWriter {
 			result.addPackage(pkg);
 
 		}
+		LOG.debug("Created XMLReport: " + result);
 		return result;
 	}
 

@@ -1,10 +1,11 @@
 package org.deepcover;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClassTracker {
+public class ClassTracker implements Serializable {
 
 	private final String className;
 

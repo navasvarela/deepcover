@@ -32,4 +32,9 @@ public class CoverStoreTest {
 
 	}
 
+	@Test
+	public void shouldSerialize() {
+
+	}
+
 }

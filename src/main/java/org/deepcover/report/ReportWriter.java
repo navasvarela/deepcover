@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.deepcover.ClassTracker;
 
 import freemarker.template.Configuration;
@@ -14,20 +16,26 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class ReportWriter {
+	private static final Log LOG = LogFactory.getLog(ReportWriter.class);
 
 	private final String fileName;
 
 	private Map<String, List<ClassTracker>> storeByPackage;
 
-	private final Map<String, ClassTracker> store;
+	private Map<String, ClassTracker> store;
 
-	private XmlReport report;
+	private ReportModel report;
 
 	public ReportWriter(String theFileName, Map<String, ClassTracker> theStore) {
 
-		fileName = theFileName;
-		store = theStore;
+		this(theFileName);
+		store = new HashMap<String, ClassTracker>();
 		createStoreByPackage();
+	}
+
+	public ReportWriter(String theFileName) {
+		fileName = theFileName;
+
 	}
 
 	private void createStoreByPackage() {
@@ -42,10 +50,12 @@ public class ReportWriter {
 			classesInPackage.add(tracker);
 			storeByPackage.put(packageName, classesInPackage);
 		}
+		LOG.debug("Created storeByPackage: " + storeByPackage);
+
 	}
 
-	private XmlReport createXmlReport() {
-		XmlReport result = new XmlReport();
+	private ReportModel createXmlReport() {
+		ReportModel result = new ReportModel();
 		for (String packageName : storeByPackage.keySet()) {
 			PackageElement pkg = new PackageElement();
 			pkg.setName(packageName);
@@ -63,9 +73,15 @@ public class ReportWriter {
 	}
 
 	public void writeXml() {
+		writeXml(createXmlReport());
+
+	}
+
+	public void writeXml(ReportModel report) {
+		LOG.debug("Writing XML For Report: " + report);
 		Configuration conf = new Configuration();
 		conf.setClassForTemplateLoading(ReportWriter.class, "/");
-		report = createXmlReport();
+
 		try {
 			Template tmpl = conf.getTemplate("/template.xml");
 			tmpl.process(report, new FileWriter(fileName));
@@ -79,10 +95,15 @@ public class ReportWriter {
 	}
 
 	public void writeHtml(String fileName) {
-		Configuration conf = new Configuration();
-		conf.setClassForTemplateLoading(ReportWriter.class, "/");
 		if (report == null)
 			report = createXmlReport();
+		writeHtml(fileName, report);
+
+	}
+
+	public void writeHtml(String fileName, ReportModel report) {
+		Configuration conf = new Configuration();
+		conf.setClassForTemplateLoading(ReportWriter.class, "/");
 
 		try {
 			Template tmpl = conf.getTemplate("/base_template.html");

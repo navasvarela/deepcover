@@ -3,7 +3,7 @@ package org.deepcover.report;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XmlReport extends SourceElement {
+public class ReportModel extends SourceElement {
 
 	private List<PackageElement> packages = new ArrayList<PackageElement>();
 
@@ -13,6 +13,33 @@ public class XmlReport extends SourceElement {
 
 	public void addPackage(PackageElement pkg) {
 		packages.add(pkg);
+	}
+
+	public PackageElement getPackage(String name) {
+		for (SourceElement el : getPackages()) {
+			if (name.equals(el.getName()))
+				return (PackageElement) el;
+		}
+		return null;
+	}
+
+	public void accummulatePackage(XMLPackage p) {
+		PackageElement el = getPackage(p.getName());
+		if (el == null) {
+			el = new PackageElement();
+			el.setName(p.getName());
+			packages.add(el);
+
+		}
+		for (XMLClass cls : p.getClasses()) {
+			el.accumulate(cls);
+		}
+	}
+
+	public void accummulate(XMLReportDocument doc) {
+		for (XMLPackage p : doc.getPackages()) {
+			accummulatePackage(p);
+		}
 	}
 
 	@Override
@@ -39,6 +66,11 @@ public class XmlReport extends SourceElement {
 			processChecks();
 
 		return String.format("%d / %d", actualEmpty, totalEmpty);
+	}
+
+	@Override
+	public String toString() {
+		return "ReportModel [packages=" + packages + "]";
 	}
 
 	@Override

@@ -1,0 +1,39 @@
+<deepcover>
+	<nullChecks>0 / 3</nullChecks>
+	<emptyChecks>0 / 1</emptyChecks>
+	<notNullChecks>3 / 3</notNullChecks>
+	<package name="org.deepcover.example">
+		<nullChecks>0 / 3</nullChecks>
+		<emptyChecks>0 / 1</emptyChecks>
+		<notNullChecks>3 / 3</notNullChecks>
+		<class name="org/deepcover/example/AnotherExampleClass">
+
+			<nullChecks>1 / 3</nullChecks>
+			<emptyChecks>1 / 1</emptyChecks>
+			<notNullChecks>2 / 3</notNullChecks>
+			<method name="whatIWantToDo2">
+				<nullChecks>1 / 2</nullChecks>
+				<emptyChecks>0 / 0</emptyChecks>
+				<notNullChecks>1 / 2</notNullChecks>
+				<argument name="arg2">
+					<nullChecks>1 / 1</nullChecks>
+					<notNullChecks>0 / 1</notNullChecks>
+				</argument>
+				<argument name="arg1">
+					<nullChecks>0 / 1</nullChecks>
+					<notNullChecks>1 / 1</notNullChecks>
+				</argument>
+			</method>
+			<method name="methodWithString2">
+				<nullChecks>0 / 1</nullChecks>
+				<emptyChecks>1 / 1</emptyChecks>
+				<notNullChecks>1 / 1</notNullChecks>
+				<argument name="arg1">
+					<nullChecks>0 / 1</nullChecks>
+					<emptyChecks>1 / 1</emptyChecks>
+					<notNullChecks>1 / 1</notNullChecks>
+				</argument>
+			</method>
+		</class>
+	</package>
+</deepcover>

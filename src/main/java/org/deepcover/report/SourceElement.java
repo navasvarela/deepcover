@@ -53,6 +53,14 @@ public abstract class SourceElement {
 	}
 
 	@Override
+	public boolean equals(Object theObj) {
+		if (theObj == null || !(theObj instanceof SourceElement))
+			return false;
+		SourceElement other = (SourceElement) theObj;
+		return other.name.equals(name);
+	}
+
+	@Override
 	public String toString() {
 		return "SourceElement [name=" + name + ", totalNull=" + totalNull
 				+ ", totalNotNull=" + totalNotNull + ", totalEmpty="

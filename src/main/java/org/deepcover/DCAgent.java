@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.instrument.Instrumentation;
+import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,16 +49,16 @@ public class DCAgent {
 		LOG.info("Using package: " + parentPkg);
 		instrumentation.addTransformer(new DCClassFileTransformer(parentPkg),
 				true);
-
+		LOG.info("CoverStore: " + CoverStore.print());
+		final Map<String, ClassTracker> store = CoverStore.getStore();
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 
 			@Override
 			public void run() {
-				System.err.println("CoverStore dump: ");
-				System.err.println(CoverStore.print());
+
 				unzipResources();
-				ReportWriter writer = new ReportWriter("deepcover.xml",
-						CoverStore.getStore());
+				ReportWriter writer = new ReportWriter("deepcover-"
+						+ UUID.randomUUID() + ".xml", store);
 				writer.writeXml();
 				writer.writeHtml("deepcover.html");
 			}

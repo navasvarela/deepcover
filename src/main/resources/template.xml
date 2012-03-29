@@ -21,7 +21,7 @@
 				<#list method.elements as arg>
 				<argument name="${arg.name}">
 					<nullChecks>${arg.nullChecks}</nullChecks>
-					<#if arg.type != 'object'>
+					<#if arg.emptyChecks != '0 / 0'>				
 					<emptyChecks>${arg.emptyChecks}</emptyChecks>
 					</#if>
 					<notNullChecks>${arg.notNullChecks}</notNullChecks>

@@ -38,9 +38,12 @@ Deepcover will look at your tests and report if you are tested for x and y being
 ## Usage
 Download the latest JAR. Run your tests passing these arguments:
 ```
--javaagent:DEEPCOVER_LOCATION/deepcover.jar -Dorg.deepcover.pkg=com.your.package.here
+-javaagent:DEEPCOVER_LOCATION/deepcover-1.0.jar -Dorg.deepcover.pkg=com.your.package.here
 ```
-
+At this point, you'll see that deepcover has generated a list of XML files with individual test reports. To generate your summary report, run:
+```
+java -cp DEEPCOVER_JAR/deepcover-1.0.jar org.deepcover.Report
+```
 ### Reports
 Deepcover generates two outputs: an XML report, that makes it easy to integrate it with build reports, and an HTML report 
 that displays the results in a more user friendly format.

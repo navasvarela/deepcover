@@ -16,6 +16,7 @@ public class DCMethodAdapter extends AdviceAdapter {
 	protected DCMethodAdapter(int api, MethodVisitor mv, int access,
 			String name, String desc, String clsName) {
 		super(api, mv, access, name, desc);
+		LOG.debug("new DCMethodAdapter for method: " + name);
 		methodName = name;
 		className = clsName;
 

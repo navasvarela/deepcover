@@ -1,5 +1,6 @@
 package org.deepcover;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.objectweb.asm.Type;
 
 public final class CoverStore {
+	private static final String COVERSTORE_SER = "coverstore.ser";
 	private static final Log LOG = LogFactory.getLog(CoverStore.class);
 	private static final Map<String, ClassTracker> classes;
 
@@ -89,12 +91,15 @@ public final class CoverStore {
 	}
 
 	private static void serialize() {
+		LOG.info("serialize -" + classes);
 		try {
-			FileOutputStream out = new FileOutputStream("coverstore.ser");
+			File file = new File(COVERSTORE_SER);
+			if (!file.exists())
+				file.createNewFile();
+			FileOutputStream out = new FileOutputStream(file);
 			ObjectOutputStream objOut = new ObjectOutputStream(out);
 			objOut.writeObject(classes);
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		}
 
@@ -102,13 +107,16 @@ public final class CoverStore {
 
 	private static Map<String, ClassTracker> deserialize() {
 		try {
-			FileInputStream fis = new FileInputStream("coverstore.ser");
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			return (Map<String, ClassTracker>) ois.readObject();
+			File file = new File(COVERSTORE_SER);
+			if (file.exists()) {
+
+				FileInputStream fis = new FileInputStream(COVERSTORE_SER);
+				ObjectInputStream ois = new ObjectInputStream(fis);
+				return (Map<String, ClassTracker>) ois.readObject();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-
 			e.printStackTrace();
 		}
 		return null;

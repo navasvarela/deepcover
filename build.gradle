@@ -10,7 +10,7 @@ sourceCompatibility = 1.6
 logging.captureStandardOutput LogLevel.DEBUG
 
 dependencies {
-	compile 'org.ow2.asm:asm:4.0','commons-logging:commons-logging:1.1.1','org.ow2.asm:asm-commons:4.0', 'org.ow2.asm:asm-util:4.0','org.freemarker:freemarker:2.3.19'
+	compile 'org.ow2.asm:asm-debug-all:4.0','commons-logging:commons-logging:1.1.1','org.freemarker:freemarker:2.3.19'
             
 	testCompile 'junit:junit:4.10','org.mockito:mockito-core:1.9.0'
             

@@ -1,9 +1,14 @@
 package org.deepcover;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,9 +28,12 @@ public class DCClassFileTransformer implements ClassFileTransformer, Opcodes {
 
 	private final boolean dump = System.getProperty("org.deepcover.dump") != null;
 
+	private Set<String> transformedClasses;
+
 	public DCClassFileTransformer(String theParentPackage) {
 		parentDir = theParentPackage.replaceAll("\\.", "/");
 		LOG.info("Class file transformer using dir: " + parentDir);
+		transformedClasses = new HashSet<String>();
 	}
 
 	@Override
@@ -34,53 +42,68 @@ public class DCClassFileTransformer implements ClassFileTransformer, Opcodes {
 			byte[] classfileBuffer) throws IllegalClassFormatException {
 
 		if (className.contains(parentDir) && !className.endsWith("Test")
-				&& !className.contains("Test$")) {
+				&& !className.contains("Test$")
+				&& !transformedClasses.contains(className)) {
 			LOG.debug("Transforming class: " + className);
 
 			ClassReader cr = new ClassReader(classfileBuffer);
-			ClassWriter cw = new ClassWriter(1);
-			ClassVisitor cv = new ClassVisitor(ASM4, cw) {
-
-				@Override
-				public MethodVisitor visitMethod(int access, String methodName,
-						String desc, String signature, String[] theExceptions) {
-					// TODO Auto-generated method stub
-					LOG.debug(String.format("visitMethod(%d,%s,%s,%s,%s)",
-							access, methodName, desc, signature, theExceptions));
-					MethodVisitor mv = super.visitMethod(access, methodName,
-							desc, signature, theExceptions);
-
-					if (mv != null && !"<init>".equals(methodName)) {
-						if (ACC_PUBLIC == access && !desc.contains("()")) {
-							CoverStore.add(className, methodName, desc);
-							mv = new DCMethodAdapter(ASM4, mv, access,
-									methodName, desc, className);
-						}
-					}
-					return mv;
-
-				}
-
-			};
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 			try {
-				cr.accept(cv, ClassReader.EXPAND_FRAMES);
-			} catch (Throwable t) {
-				LOG.error(t);
-			}
-			if (dump) {
+				ClassVisitor cv = new ClassVisitor(ASM4, cw) {
+
+					@Override
+					public MethodVisitor visitMethod(int access,
+							String methodName, String desc, String signature,
+							String[] theExceptions) {
+
+						LOG.debug(String.format("visitMethod(%d,%s,%s,%s,%s)",
+								access, methodName, desc, signature,
+								theExceptions));
+						MethodVisitor mv = super.visitMethod(access,
+								methodName, desc, signature, theExceptions);
+						if (mv == null)
+							LOG.debug("MethodVisitor null for method: "
+									+ methodName);
+						if (mv != null && !"<init>".equals(methodName)) {
+							if (ACC_PUBLIC == access && !desc.contains("()")) {
+								CoverStore.add(className, methodName, desc);
+								mv = new DCMethodAdapter(ASM4, mv, access,
+										methodName, desc, className);
+							}
+						}
+						return mv;
+
+					}
+
+				};
+				cr.accept(cv, ClassReader.EXPAND_FRAMES
+						+ ClassReader.SKIP_DEBUG);
+
 				LOG.info("Dumping bytecode for class:" + className);
-				dump(cw.toByteArray());
+				dump(cw.toByteArray(), className);
+
+			} catch (Throwable t) {
+				LOG.error("Exception while writing class", t);
 			}
+			transformedClasses.add(className);
 			return cw.toByteArray();
 		}
 		return classfileBuffer;
 	}
 
-	private static void dump(byte[] bytes) {
+	private static void dump(byte[] bytes, String classname) throws IOException {
+		LOG.debug("dump - bytes: " + bytes.length + ", class: " + classname);
 		ClassReader reader = new ClassReader(bytes);
-		ClassVisitor visitor = new TraceClassVisitor(
-				new PrintWriter(System.out));
+		File deepcoverDir = new File("deepcover");
+		if (!deepcoverDir.exists())
+			deepcoverDir.mkdir();
+		String fileName = "deepcover/" + classname.replaceAll("/", ".")
+				+ ".dmp";
+		File dumpFile = new File(fileName);
+		dumpFile.createNewFile();
+		ClassVisitor visitor = new TraceClassVisitor(new PrintWriter(
+				new FileWriter(fileName)));
 		reader.accept(visitor, 0);
-	}
 
+	}
 }

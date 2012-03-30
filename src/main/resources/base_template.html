@@ -31,28 +31,23 @@ body {
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> 
-					<span class="icon-bar"></span> 
-					<span class="icon-bar"></span> 
-					<span class="icon-bar"></span>
-				</a> 
-				<a class="brand" href="#">DeepCover Report</a>
+				<a class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span>
+				</a> <a class="brand" href="#">DeepCover Report</a>
 				<div class="nav-collapse">
 					<ul class="nav">
-						<li class="active"><a href="#">Home</a></li> 
-						<li class="dropdown">
-						
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#packages">Packages
-						 <b class="caret"></b>
+						<li class="active"><a href="#">Home</a></li>
+						<li class="dropdown"><a class="dropdown-toggle"
+							data-toggle="dropdown" href="#packages">Packages <b
+								class="caret"></b>
 						</a>
-						<ul class="dropdown-menu">
-						<#list packages as pkg>
-							<li><a href="#${pkg.name}">${pkg.name}</a></li> 
-						</#list>
-						</ul>
-						</li>
-							
-            		</ul>
+							<ul class="dropdown-menu">
+								<#list packages as pkg>
+								<li><a href="#${pkg.name}">${pkg.name}</a></li> </#list>
+							</ul></li>
+
+					</ul>
 				</div>
 				<!--/.nav-collapse -->
 			</div>
@@ -66,53 +61,92 @@ body {
 			Use this document as a way to quick start any new project.<br>
 			All you get is this message and a barebones HTML document.
 		</p>
-		
+
 		<#list packages as pkg>
-		<div id="${pkg.name}" >
-		<div class="page-header">
-		<h2>Package: ${pkg.name}</h2>
-		</div>
-		<h3>Summary</h3>
-		<div class="row">
-		<div class="span4">
-		<table class="table table-bordered table-striped">
-			
-			<tr><td>Null Checks:</td><td>${pkg.nullChecks}</td></tr>
-			<tr><td>Empty Checks:</td><td>${pkg.emptyChecks}</td></tr>
-			<tr><td>Not Null Checks:</td><td>${pkg.notNullChecks}</td></tr>
-		</table>
-		</div>
-		<div class="span8">
-		<h3>List of classes</h3>
-		<table class="table table-bordered table-striped">
-		<tr><th>Class</th><th>Null Checks</th><th>Empty checks</th><th>Not null Checks</th></tr>
-		<#list pkg.elements as cls>
-			
-			<tr><td><strong>${cls.name}</strong></td><td>${cls.nullChecks}</td><td>${cls.emptyChecks}</td><td>${cls.notNullChecks}</td></tr>
-		</#list>
-		</table>	
-		</div>
-		</div>
-		
-		<#list pkg.elements as cls>
-		<br/>
+		<div id="${pkg.name}">
+			<div class="page-header">
+				<h2>Package: ${pkg.name}</h2>
+			</div>
+			<h3>Summary</h3>
+			<div class="row">
+				<div class="span4">
+					<table class="table table-bordered table-striped">
+
+						<tr>
+							<td>Null Checks:</td>
+							<td>${pkg.nullChecks}</td>
+						</tr>
+						<tr>
+							<td>Empty Checks:</td>
+							<td>${pkg.emptyChecks}</td>
+						</tr>
+						<tr>
+							<td>Not Null Checks:</td>
+							<td>${pkg.notNullChecks}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="span8">
+					<h3>List of classes</h3>
+					<table class="table table-bordered table-striped">
+						<tr>
+							<th>Class</th>
+							<th>Null Checks</th>
+							<th>Empty checks</th>
+							<th>Not null Checks</th>
+						</tr>
+						<#list pkg.elements as cls>
+
+						<tr>
+							<td><strong>${cls.name}</strong></td>
+							<td>${cls.nullChecks}</td>
+							<td>${cls.emptyChecks}</td>
+							<td>${cls.notNullChecks}</td>
+						</tr>
+						</#list>
+					</table>
+				</div>
+			</div>
+
+			<#list pkg.elements as cls> <br />
 			<h2>Class Summary: ${cls.name}</h2>
+			<div class="span4">
+				<table class="table table-bordered table-striped">
+
+					<tr>
+						<td>Null Checks:</td>
+						<td>${cls.nullChecks}</td>
+					</tr>
+					<tr>
+						<td>Empty Checks:</td>
+						<td>${cls.emptyChecks}</td>
+					</tr>
+					<tr>
+						<td>Not Null Checks:</td>
+						<td>${cls.notNullChecks}</td>
+					</tr>
+
+				</table>
+			</div>
+			<h4>Method Summary:</h4>
 			<table class="table table-bordered table-striped">
-			
-			<tr><td>Null Checks:</td><td>${cls.nullChecks}</td></tr>
-			<tr><td>Empty Checks:</td><td>${cls.emptyChecks}</td></tr>
-			<tr><td>Not Null Checks:</td><td>${cls.notNullChecks}</td></tr>
-			
-		    </table>
-		    <h4>Method Summary:</h4>
-		    <table class="table table-bordered table-striped">
-		    <tr><th>Method name</th><th>Null Checks</th><th>Empty checks</th><th>Not null Checks</th></tr>
-		    <#list cls.elements as method>
-				<tr><td>${method.name}</td><td>${method.nullChecks}</td><td> ${method.emptyChecks}</td><td> ${method.notNullChecks}</td></tr>
+				<tr>
+					<th>Method name</th>
+					<th>Null Checks</th>
+					<th>Empty checks</th>
+					<th>Not null Checks</th>
+				</tr>
+				<#list cls.elements as method>
+				<tr>
+					<td>${method.name}</td>
+					<td>${method.nullChecks}</td>
+					<td>${method.emptyChecks}</td>
+					<td>${method.notNullChecks}</td>
+				</tr>
+				</#list>
+
+			</table>
 			</#list>
-		    
-		    </table>
-		</#list>
 		</div>
 		</#list>
 
@@ -120,8 +154,8 @@ body {
 	<!-- /container -->
 
 	<script type="text/javascript" src="./jquery-1.7.2.min.js"></script>
-	<script type="text/javascript" src="./bootstrap/js/bootstrap.js" ></script>
-	
+	<script type="text/javascript" src="./bootstrap/js/bootstrap.js"></script>
+
 	<script type="text/javascript">
 		$('.dropdown-toggle').dropdown();
 	</script>

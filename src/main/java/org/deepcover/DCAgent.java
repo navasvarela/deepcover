@@ -47,9 +47,12 @@ public class DCAgent {
 				deepcoverDir.mkdir();
 				final Map<String, ClassTracker> store = CoverStore.getStore();
 				LOG.info("CoverStore: " + store);
-				ReportWriter writer = new ReportWriter("deepcover/deepcover-"
-						+ UUID.randomUUID() + ".xml", store);
-				writer.writeXml();
+				if (store != null) {
+					ReportWriter writer = new ReportWriter(
+							"deepcover/deepcover-" + UUID.randomUUID() + ".xml",
+							store);
+					writer.writeXml();
+				}
 
 			}
 
